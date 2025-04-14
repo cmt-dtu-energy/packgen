@@ -9,7 +9,22 @@ except ImportError:
 import random
 import array as arr
 import numpy as np
+import os
+import json
 
+# Load configuration from JSON file
+json_file_path = os.path.join(r"C:\Users\antre\Engineering physics repos\packing\packgen\src\packgen\config_example.json")
+
+# Load JSON data
+with open(json_file_path, "r") as file:
+    data = json.load(file)
+
+# Extract parameters
+CombinationsRadii = np.array(data.get("radii"))
+CombinationsHeights = np.array(data.get("heights"))
+CombinationDensities = np.array(data.get("densities"))
+CombinationsMassFractions = np.array(data.get("massFractions"))
+a = data.get("container_cube_side")
 
 def volume_prism(sides, radii, heights):
     # https://en.wikipedia.org/wiki/Regular_polygon
@@ -43,17 +58,17 @@ def number_ratio(mass_ratio, densities, heights, radii):
 
 # The two arrays must be the same number of elements
 # (they represent COMBINATIONS of radius and height)
-CombinationsRadii = arr.array(
-    "d", [0.1, 0.1, 0.1]
-)
-CombinationsHeights = arr.array(
-    "d", [0.2, 0.25, 0.3]
-)
+# CombinationsRadii = arr.array(
+#     "d", [0.1, 0.1, 0.1]
+# )
+# CombinationsHeights = arr.array(
+#     "d", [0.2, 0.25, 0.3]
+# )
 
-CombinationsMassFractions = arr.array(
-    "d", [1.0, 1.0, 1.0]
-)
-CombinationDensities = arr.array("d", [1.0, 1.0, 1.0])
+# CombinationsMassFractions = arr.array(
+#     "d", [1.0, 1.0, 1.0]
+# )
+# CombinationDensities = arr.array("d", [1.0, 1.0, 1.0])
 a = 1.5
 
 CombinationsFractions = number_ratio(
@@ -193,8 +208,12 @@ def generate_cylinders_random(N, a, cube_thickness):
     bpy.ops.object.select_by_type(type="MESH")
     bpy.ops.object.delete()
 
-    height = 0.0
-
+    self_avoidance = []
+    for i in range(len(CombinationsHeights)):
+        self_avoidance.append(np.sqrt(CombinationsRadii[i]**2 + (CombinationsHeights[i]/2)**2))
+    
+    previousI = 0
+    height = 0
     for n in range(N):
         ThisRandomNumber = random.uniform(0.0, 1.0)
         LastI = -1
@@ -203,12 +222,13 @@ def generate_cylinders_random(N, a, cube_thickness):
                 LastI = i
         LastI = LastI + 1
 
-        max_height = max(CombinationsHeights)
-        max_radius = max(CombinationsRadii)
-        self_avoidance = np.sqrt(max_radius**2 + (max_height/2)**2)
-
         # Generation square should be smaller than the cube so the cylinders do not touch the walls
-        generation_a = a - self_avoidance - cube_thickness
+        generation_a = a - self_avoidance[LastI] - cube_thickness
+        if i == 0:
+            height = height + self_avoidance[LastI]
+            previousI = LastI
+        else:
+            height = height + self_avoidance[LastI] + self_avoidance[previousI]
 
         bpy.ops.mesh.primitive_cylinder_add(
             vertices=6,
@@ -218,12 +238,13 @@ def generate_cylinders_random(N, a, cube_thickness):
             location=(
                 random.uniform(-generation_a, generation_a) / 2,
                 random.uniform(-generation_a, generation_a) / 2,
-                (n + 1) * self_avoidance,
+                height,
             ),
         )
 
         height += self_avoidance
 
+        previousI = LastI
         # Get the active object (the newly created cube)
         cube = bpy.context.active_object
 
@@ -258,6 +279,7 @@ def main():
 
     thickness = -0.2
 
+    print(int(TheSum))
     stack_height = generate_cylinders_random(int(TheSum), a, np.abs(thickness))
 
     cube = create_cube_without_top_face(a, stack_height)
