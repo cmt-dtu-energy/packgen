@@ -31,9 +31,21 @@ def number_ratio(mass_ratio, densities, heights, radii):
 
     particle_masses = np.array(densities) * particle_volumes
 
-    number_ratios = np.array(mass_ratio) / particle_masses
+    number_ratios = np.array(mass_ratio) / particle_masses  
 
-    return number_ratios
+    number_ratios_rounded = np.ceil(number_ratios)
+
+    mass_ratios_rounded = number_ratios_rounded * particle_masses
+
+    relative_mass_error = np.abs(
+        mass_ratios_rounded - np.array(mass_ratio)
+    ) / np.array(mass_ratio)
+
+    for error in relative_mass_error:
+        if error > 0.01:
+            raise Warning("The relative error in mass ratios due to rounding is larger than 1%.")
+
+    return number_ratios_rounded
 
 # 1) Select "Scripting" workspace
 # 2) In the "Text Editor" window, open this script and click "Run Script"
