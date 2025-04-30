@@ -81,17 +81,6 @@ CombinationGreen = arr.array("d", [0.6, 0.8, 0.5])
 CombinationBlue = arr.array("d", [0.7, 0.5, 0.8])
 TheSum = sum(CombinationsFractions)
 
-# Normalize array
-for i in range(len(CombinationsFractions)):
-    CombinationsFractions[i] = CombinationsFractions[i] / TheSum
-
-# Cumulative Sum
-CumulativeSum = 0.0
-for i in range(len(CombinationsFractions)):
-    CumulativeSum = CumulativeSum + CombinationsFractions[i]
-    CombinationsCumSum[i] = CumulativeSum
-
-
 # Container box
 def create_cube_without_top_face(thesize, cube_height):
     scalez = cube_height / thesize
@@ -208,8 +197,16 @@ def generate_cylinders_grid():
     return z * distance
 
 def generate_cylinders_random(N, a, cube_thickness):
-    # Customize the following parameters for your array of cubes
+    '''Generates N cylinders layer by layer in the area above the cube, positioned and rotated randomly.'''
     random.seed(42)  # Optional: set a seed for reproducible results
+
+    # Create a list of cylinder types based on the number ratio and shuffle it
+    cylinders = []
+    for type_id in range(len(CombinationsFractions)):
+        for i in range(int(CombinationsFractions[type_id])):
+            cylinders.append(type_id)
+    cylinders = np.array(cylinders)
+    np.random.shuffle(cylinders)
 
     # Delete all existing mesh objects
     bpy.ops.object.select_all(action="DESELECT")
@@ -219,12 +216,6 @@ def generate_cylinders_random(N, a, cube_thickness):
     height = 0.0
 
     for n in range(N):
-        ThisRandomNumber = random.uniform(0.0, 1.0)
-        LastI = -1
-        for i in range(len(CombinationsFractions)):
-            if ThisRandomNumber > CombinationsCumSum[i]:
-                LastI = i
-        LastI = LastI + 1
 
         max_height = max(CombinationsHeights)
         max_radius = max(CombinationsRadii)
@@ -232,11 +223,10 @@ def generate_cylinders_random(N, a, cube_thickness):
 
         # Generation square should be smaller than the cube so the cylinders do not touch the walls
         generation_a = a - self_avoidance - cube_thickness
-
         bpy.ops.mesh.primitive_cylinder_add(
             vertices=6,
-            radius= CombinationsRadii[LastI],
-            depth= CombinationsHeights[LastI],
+            radius=CombinationsRadii[cylinders[n]],
+            depth=CombinationsHeights[cylinders[n]],
             enter_editmode=False,
             location=(
                 random.uniform(-generation_a, generation_a) / 2,
@@ -264,9 +254,9 @@ def generate_cylinders_random(N, a, cube_thickness):
 
         mat = bpy.data.materials.new("PKHG")
         mat.diffuse_color = (
-            float(CombinationRed[LastI]),
-            float(CombinationGreen[LastI]),
-            float(CombinationBlue[LastI]),
+            float(CombinationRed[cylinders[n]]),
+            float(CombinationGreen[cylinders[n]]),
+            float(CombinationBlue[cylinders[n]]),
             1.0,
         )
         mat.specular_intensity = 0
