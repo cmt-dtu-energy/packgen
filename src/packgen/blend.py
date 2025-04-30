@@ -45,7 +45,7 @@ def number_ratio(mass_ratio, densities, heights, radii):
         if error > 0.01:
             raise Warning("The relative error in mass ratios due to rounding is larger than 1%.")
 
-    return number_ratios
+    return number_ratios_rounded
 
 # 1) Select "Scripting" workspace
 # 2) In the "Text Editor" window, open this script and click "Run Script"
