@@ -141,6 +141,16 @@ def generate_cylinders_grid():
     bpy.ops.object.select_by_type(type="MESH")
     bpy.ops.object.delete()
 
+    # Normalize array
+    for i in range(len(CombinationsFractions)):
+        CombinationsFractions[i] = CombinationsFractions[i] / TheSum
+
+    # Cumulative Sum
+    CumulativeSum = 0.0
+    for i in range(len(CombinationsFractions)):
+        CumulativeSum = CumulativeSum + CombinationsFractions[i]
+        CombinationsCumSum[i] = CumulativeSum
+
     # Create an array of cubes with random sizes determined by the log-normal distribution
     count = 0
     for x in range(num_cubes_x):
@@ -195,6 +205,7 @@ def generate_cylinders_grid():
 
                 if count == total_number:
                     break
+    return z * distance
 
 def generate_cylinders_random(N, a, cube_thickness):
     # Customize the following parameters for your array of cubes
