@@ -3,13 +3,13 @@
 	"meshSize": 9, 
 	"saturationMagnetization":3.6e5,
 	"nParticles": 2,
-	"stlFilename": "particles_200.stl",
 	"coercivities": [1.41, 1.31],
 	"aParameters": [0.01,0.03],
 	"initialMagneticScalarPotential": -1000,
-	"radii": [0.1, 0.1, 0.1],
-	"heights": [0.2, 0.25, 0.3],
-	"massFractions": [1.0, 1.0, 1.0],
-    "densities": [1.0, 1.0, 1.0],
-    "container_cube_side": 1.5
+	"radii": [1, 0.295],
+	"heights": [0.4355, 0.135],
+	"massFractions": [180, 0],
+    "densities": [1.6, 1.6],
+    "container_cube_side": 5,
+	"cache_length": 500
 }
