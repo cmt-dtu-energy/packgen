@@ -83,7 +83,6 @@ def number_ratio(mass_ratio, densities, heights, radii):
 #     "d", [1.0, 1.0, 1.0]
 # )
 # CombinationDensities = arr.array("d", [1.0, 1.0, 1.0])
-a = 1.5
 
 CombinationsFractions = number_ratio(
     CombinationsMassFractions,
@@ -105,6 +104,8 @@ def create_cube_without_top_face(thesize, cube_height):
         size=thesize, enter_editmode=False, location=(0, 0, 0 + (cube_height)/2), scale=(1, 1, scalez)
     )
     cube = bpy.context.active_object
+
+    cube.name = "ContainerCube"
 
     bpy.ops.object.mode_set(mode="EDIT")
     bpy.ops.mesh.select_all(action="DESELECT")
@@ -277,7 +278,9 @@ def generate_cylinders_random(N, a, cube_thickness):
         mat.specular_intensity = 0
 
         cube.active_material = mat
-
+    
+    height = (N + 1) * 2 * self_avoidance
+    
     return height
 
 def main():
@@ -294,17 +297,31 @@ def main():
 
     add_passive_rigidbody(cube)
 
+    def set_cache_and_bake(cache_length):
+        scene = bpy.context.scene
+        scene.frame_start = 1
+        scene.frame_end = cache_length
+        scene.rigidbody_world.point_cache.frame_start = 1
+        scene.rigidbody_world.point_cache.frame_end = cache_length
+
+        bpy.ops.rigidbody.bake_to_keyframes(frame_start=1, frame_end=cache_length)
+
+    set_cache_and_bake(500)
 
     def export_stl():
-        stl_path = os.path.join(os.path.expanduser("~"), "packgen_result.stl")
+        # stl_path = os.path.join(os.path.expanduser("~"), "packgen_result.stl")
+        stl_path = os.path.join(os.path.expanduser("~"),r"Engineering physics repos\packings\mass 120 - Copy\packgen_result.stl")
 
         print("Exporting to", stl_path)
         bpy.ops.wm.stl_export(filepath=stl_path)
-        
+
     def stop_playback(scene):
-        if scene.frame_current == 200:
+        if scene.frame_current == scene.frame_end-5:
             bpy.ops.screen.animation_cancel(restore_frame=False)
-            bpy.ops.object.delete(use_global=False)
+            print("Stopping playback and exporting STL...")
+
+            cube = bpy.data.objects["ContainerCube"]
+            bpy.data.objects.remove(cube, do_unlink=True)
             export_stl()
 
     bpy.app.handlers.frame_change_pre.append(stop_playback)
