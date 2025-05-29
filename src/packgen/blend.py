@@ -57,6 +57,7 @@ def number_ratio(mass_ratio, densities, heights, radii):
         mass_ratios_rounded - np.array(mass_ratio)
     ) / np.array(mass_ratio)
 
+    print('relative mass error', relative_mass_error)
     for error in relative_mass_error:
         if error > 0.01:
             raise Warning("The relative error in mass ratios due to rounding is larger than 1%.")
@@ -91,10 +92,10 @@ CombinationsFractions = number_ratio(
     CombinationsRadii
 )
 
-CombinationsCumSum = arr.array("d", [0.0, 0.0, 0.0])
-CombinationRed = arr.array("d", [1.0, 1.0, 0.0])
-CombinationGreen = arr.array("d", [0.6, 0.8, 0.5])
-CombinationBlue = arr.array("d", [0.7, 0.5, 0.8])
+CombinationsCumSum = arr.array("d", [0.0, 0.0])
+CombinationRed = arr.array("d", [1.0, 1.0])
+CombinationGreen = arr.array("d", [0.6, 0.8])
+CombinationBlue = arr.array("d", [0.7, 0.5])
 TheSum = sum(CombinationsFractions)
 
 # Container box
