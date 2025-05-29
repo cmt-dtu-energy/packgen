@@ -13,7 +13,8 @@ import os
 import json
 
 # Load configuration from JSON file
-json_file_path = os.path.join(r"C:\Users\antre\Engineering physics repos\packing\packgen\src\packgen\config_example.json")
+configuration_path = "REPLACE WITH YOUR CONFIGURATION PATH"
+json_file_path = os.path.join(configuration_path)
 
 # Load JSON data
 with open(json_file_path, "r") as file:
@@ -26,6 +27,7 @@ CombinationDensities = np.array(data.get("densities"))
 CombinationsMassFractions = np.array(data.get("massFractions"))
 CubeSide = data.get("cube_side")
 a = data.get("container_cube_side")
+cache_length = data.get("cache_length")
 
 def volume_prism(sides, radii, heights):
     # https://en.wikipedia.org/wiki/Regular_polygon
@@ -306,11 +308,11 @@ def main():
 
         bpy.ops.rigidbody.bake_to_keyframes(frame_start=1, frame_end=cache_length)
 
-    set_cache_and_bake(500)
+    set_cache_and_bake(cache_length)
 
     def export_stl():
         # stl_path = os.path.join(os.path.expanduser("~"), "packgen_result.stl")
-        stl_path = os.path.join(os.path.expanduser("~"),r"Engineering physics repos\packings\mass 120 - Copy\packgen_result.stl")
+        stl_path = os.path.join(os.path.expanduser("~"),"packgen_result.stl")
 
         print("Exporting to", stl_path)
         bpy.ops.wm.stl_export(filepath=stl_path)

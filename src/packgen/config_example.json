@@ -10,5 +10,6 @@
 	"heights": [0.4355, 0.135],
 	"massFractions": [180, 0],
     "densities": [1.6, 1.6],
-    "container_cube_side": 5
+    "container_cube_side": 5,
+	"cache_length": 500
 }
