@@ -24,6 +24,7 @@ CombinationsRadii = np.array(data.get("radii"))
 CombinationsHeights = np.array(data.get("heights"))
 CombinationDensities = np.array(data.get("densities"))
 CombinationsMassFractions = np.array(data.get("massFractions"))
+CubeSide = data.get("cube_side")
 a = data.get("container_cube_side")
 
 def volume_prism(sides, radii, heights):
