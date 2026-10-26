@@ -1,0 +1,50 @@
+site_name: packgen
+site_description: Particle packing generator based on Blender's rigid-body physics
+site_url: https://cmt-dtu-energy.github.io/packgen/
+repo_url: https://github.com/cmt-dtu-energy/packgen
+repo_name: cmt-dtu-energy/packgen
+edit_uri: edit/develop/docs/
+
+nav:
+  - Home: index.md
+  - Parameters: parameters.md
+  - API reference: reference.md
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - navigation.footer
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_submodules: true
+            show_source: true
+            show_root_heading: true
+            members_order: source
+            merge_init_into_class: true
