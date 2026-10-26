@@ -50,6 +50,8 @@ source = ["packgen"]
 # blend.py only runs inside Blender's embedded interpreter; it is exercised by
 # the `blender`-marked end-to-end test instead of being measured here.
 omit = ["*/packgen/blend.py"]
+# needed by the CI coverage report, which runs in a different checkout
+relative_files = true
 
 [tool.coverage.report]
 show_missing = true

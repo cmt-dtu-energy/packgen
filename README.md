@@ -1,5 +1,8 @@
 # packgen
 
+[![tests](https://github.com/cmt-dtu-energy/packgen/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/cmt-dtu-energy/packgen/actions/workflows/tests.yml)
+[![coverage](https://raw.githubusercontent.com/cmt-dtu-energy/packgen/python-coverage-comment-action-data/badge.svg)](https://github.com/cmt-dtu-energy/packgen/tree/python-coverage-comment-action-data)
+
 `packgen` is a tool that generates a packing of particles for various purposes. The primary goal is to generate an STL file with a mesh of the packing.
 
 Currently, only hexagonal particles are implemented. 
