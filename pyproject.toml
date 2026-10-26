@@ -33,7 +33,26 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = ["pytest>=8.3.5"]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = ["-m", "not blender"]
+markers = [
+  "blender: end-to-end tests that need a Blender executable (deselected by default; run with -m blender)",
+]
+
+[tool.coverage.run]
+source = ["packgen"]
+# blend.py only runs inside Blender's embedded interpreter; it is exercised by
+# the `blender`-marked end-to-end test instead of being measured here.
+omit = ["*/packgen/blend.py"]
+
+[tool.coverage.report]
+show_missing = true
 
 [tool.ruff.lint]
 extend-select = [
