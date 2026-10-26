@@ -15,21 +15,33 @@ authors = [
   { name = "Andrea R. Insinga", email = "aroin@dtu.dk" },
   { name = "Andreas Papanikolaou", email = "s232477@student.dtu.dk" },
 ]
+# bpy wheels are published for a single CPython minor version (3.11 for bpy 4.x),
+# so packgen is pinned to that version too.
 requires-python = ">=3.11, <3.12"
-dependencies = ["bpy>=4.4.0", "numpy < 2"]
+# numpy is not imported directly; it is pinned because bpy 4.x is built against numpy 1.x.
+dependencies = ["bpy>=4.4.0", "numpy>=1.26, <2"]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.11",
   "Operating System :: OS Independent",
-  "License :: OSI Approved :: MIT License",
 ]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/cmt-dtu-energy/packgen"
+Source = "https://github.com/cmt-dtu-energy/packgen"
+Issues = "https://github.com/cmt-dtu-energy/packgen/issues"
 
 [project.scripts]
 packgen = "packgen:main"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
