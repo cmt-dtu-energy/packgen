@@ -34,6 +34,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = ["pytest>=8.3.5"]
+docs = ["mkdocs-material>=9.5", "mkdocstrings[python]>=0.27"]
 
 [tool.ruff.lint]
 extend-select = [
