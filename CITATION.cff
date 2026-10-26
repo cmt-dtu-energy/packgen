@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use packgen in your research, please cite it using the metadata below."
+type: software
+title: "packgen: a particle packing generator"
+abstract: >-
+  packgen generates packings of prismatic particles by simulating their settling
+  under gravity, collisions and friction with Blender's rigid-body physics engine,
+  and exports the result as an STL mesh.
+authors:
+  - given-names: "Fábio P."
+    family-names: Fortkamp
+    email: fabio@fabiofortkamp.com
+    affiliation: Technical University of Denmark
+  - given-names: "Andrea R."
+    family-names: Insinga
+    email: aroin@dtu.dk
+    affiliation: Technical University of Denmark
+  - given-names: Andreas
+    family-names: Papanikolaou
+    affiliation: Technical University of Denmark
+version: 0.6.0
+license: MIT
+repository-code: "https://github.com/cmt-dtu-energy/packgen"
+keywords:
+  - particle packing
+  - packing generator
+  - blender
+  - rigid-body simulation
+# The archival DOI is added here once the v1.0.0 release is archived on Zenodo (#27).
